@@ -80,7 +80,7 @@ nnoremap <leader>/ :let @/=''<CR>
 nnoremap <leader>c viW~
 
 " Quick insert common separator
-nnoremap <leader>; 80a*<esc>o<esc>
+nnoremap <leader>; 80a-<esc>
 
 cnoremap <c-k> <up>
 cnoremap <c-j> <down>
