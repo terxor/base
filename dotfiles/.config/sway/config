@@ -182,8 +182,8 @@ workspace $ws9 output $main_display
 bindsym $mod+Shift+c reload
 
 # Set inner/outer gaps
-gaps inner 5
-gaps outer 15
+gaps inner 4
+gaps outer 10
 gaps top 0
 for_window [class=".*"] border pixel 0
 
