@@ -42,11 +42,11 @@ KEYTIMEOUT=1
 
 bindkey -M vicmd ';'  end-of-line
 
-# The prompt shows status of last command in first line.
-# The full directory (unless ~) in the second line.
+precmd() { local c=$?; EXIT_HEX="%F{white}[%f%F{$([ $c -eq 0 ] && echo green || echo red)}0x$(printf '%02X' $c)%f%F{white}]%f"; }
+# The prompt shows status of last command in hex form in [...]
+# followed by the full directory (unless ~).
 # The j part shows number of suspended jobs
-PROMPT='%(?:%F{green}OK%f:%F{red}FAILED%f) %F{white}($?)%f
-%F{blue}%~%f%F{red}%(1j. [%j].)%f $(git_prompt_info) %F{white}$(vi_mode_prompt_info)%f
+PROMPT='$EXIT_HEX %F{blue}%~%f%F{yellow}%(1j. [%j].)%f $(git_prompt_info) %F{white}$(vi_mode_prompt_info)%f
 '
 
 RPROMPT=""
@@ -69,6 +69,8 @@ alias gitstat='find . -maxdepth 1 -mindepth 1 -type d -exec sh -c "(echo {} && c
 
 # show dotfiles/dirs by default but ignore .git
 alias tree='tree -a -I .git'
+
+alias vd='nvim -d'
 
 # --------------------------------
 # utils

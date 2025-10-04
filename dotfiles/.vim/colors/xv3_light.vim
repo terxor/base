@@ -29,6 +29,7 @@ let s:grey_alt     = "145"
 let s:lblue        = "153"
 let s:lgrey        = "252"
 let s:off_white    = "254"
+let s:orange4 = "94"
 let s:almostwhite  = "255"
 let s:purple       = "56"
 let s:red          = "88"
@@ -125,7 +126,7 @@ call HgS("xv3_Warn", "", s:warn_bg, "")
 call HgS("DiffAdd", s:green, s:b_green, "")
 call HgS("DiffDelete", s:b_red, s:b_red, s:none)
 call HgS("DiffChange", "", s:b_yellow, "")
-call HgS("DiffText", "", s:warn_bg, "")
+call HgS("DiffText", s:orange4, s:warn_bg, "")
 
 " call HgS("SignColumn", "", s:warn_bg, "")
 call HgS("FoldColumn", s:fg, s:bg, s:none)
