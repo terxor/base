@@ -42,11 +42,10 @@ KEYTIMEOUT=1
 
 bindkey -M vicmd ';'  end-of-line
 
-precmd() { local c=$?; EXIT_HEX="%F{white}[%f%F{$([ $c -eq 0 ] && echo green || echo red)}0x$(printf '%02X' $c)%f%F{white}]%f"; }
-# The prompt shows status of last command in hex form in [...]
+# The prompt shows exit code of last command in [...]
 # followed by the full directory (unless ~).
 # The j part shows number of suspended jobs
-PROMPT='$EXIT_HEX %F{blue}%~%f%F{yellow}%(1j. [%j].)%f $(git_prompt_info) %F{white}$(vi_mode_prompt_info)%f
+PROMPT='%F{white}[%f%(?:%F{green}:%F{red})$?%f%F{white}]%f %F{blue}%~%f%F{yellow}%(1j. [%j].)%f $(git_prompt_info) %F{white}$(vi_mode_prompt_info)%f
 '
 
 RPROMPT=""
