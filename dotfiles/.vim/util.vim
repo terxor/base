@@ -128,6 +128,33 @@ function! RunTextQuery(...) abort
 
 endfunction
 
+function! RunTextQueryInline(...) abort
+
+  " Find the surrounding code block for the query
+  let [start, end] = FindSurroundingCodeBlock()
+  let query_lines = getline(start, end)
+  let query = join(query_lines, " ")
+
+  " Find the table above
+  let [t_start, t_end] = FindTableAbove()
+  let lines = getline(t_start, t_end)
+  let normalized = systemlist('dfx --from md --to csv', lines)
+
+  " Construct the shell command with the query
+  let cmd = 'textquery ' . shellescape(query)
+
+  " Run shell command with table as input
+  let result = systemlist(cmd, normalized)
+
+  " Replace original table with result
+  call setline(t_start, result)
+  if len(result) < t_end - t_start + 1
+    " Delete extra lines if the result is shorter than original
+    call deletebufline('%', t_start + len(result), t_end)
+  endif
+
+endfunction
+
 function! ExecBacktickToggle()
   let cols = input("Enter column numbers (comma-separated): ")
   if empty(cols)
@@ -158,6 +185,7 @@ command! Md2Csv call RunCmdOnPara('dfx --from md --to csv')
 command! MdTableFixup call RunCmdOnPara('dfx --from md --to md')
 command! BacktickToggle call ExecBacktickToggle()
 command! TextQuery call RunTextQuery()
+command! TextQueryInline call RunTextQueryInline()
 command! RunCurrentBuf call RunCurrentBuf()
 
 nnoremap <leader><leader>x :RunCurrentBuf<CR>
