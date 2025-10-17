@@ -13,15 +13,5 @@
   },
   "battery": {
     "format": "B {capacity}",
-  },
-  "custom/cpu_temp": {
-    "format": "CPU {}°C",
-    "exec": "sensors | grep 'Package id 0:' | awk '{print $4}' | tr -d '+' | cut -d '.' -f1",
-    "interval": 5
-  },
-  "custom/mem": {
-    "format": "RAM {}",
-    "exec": "free -b | awk '/Mem:/ {printf \"%.2fG\\n\", $3 / (1024*1024*1024)}'",
-    "interval": 5
   }
 }

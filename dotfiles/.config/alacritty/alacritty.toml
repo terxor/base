@@ -1,56 +1,8 @@
 # .alacritty.toml
 
-[window]
-padding = { x = 5, y = 5 }
-dynamic_title = false
-opacity = 1.0
-
-[scrolling]
-history = 50000
-
-[font]
-size = 15
-normal = { family = "Iosevka" }
-
-[cursor.style]
-shape = "Block"
-blinking = "Never"
-
-# Colors: from 256-colors pallete
-
-[colors.primary]
-background = "#ffffff" # 231
-foreground = "#3a3a3a" # 236
-
-[colors.selection]
-text       = "#000000" #   0
-background = "#d7d7d7" # 188
-
-[colors.cursor]
-text       = "#ffffff" # 230
-cursor     = "#3a3a3a" # 237
-
-[colors.normal]
-black      = "#3a3a3a" # 237
-red        = "#af0000" # 124
-green      = "#008700" #  28
-yellow     = "#af8700" # 136
-blue       = "#005f87" #  24
-magenta    = "#870087" #  90
-cyan       = "#008787" #  30
-white      = "#808080" # 244
-
-# Disable default keybinds
-[mouse]
-bindings = [
-  { mouse = "Middle",  action = "ReceiveChar" },
-]
-
-[keyboard]
-bindings = [
-  { key = "+",  mods = "Control", action = "ReceiveChar" },
-  { key = "-",  mods = "Control", action = "ReceiveChar" },
-  { key = "=",  mods = "Control", action = "ReceiveChar" },
-  { key = "F11", action = "ToggleFullscreen" },
+[general]
+import = [
+  "~/.config/alacritty/base.toml",
+  "~/.config/alacritty/custom.toml"
 ]
 

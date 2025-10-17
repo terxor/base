@@ -1,0 +1,181 @@
+#!/usr/bin/env bash
+
+# Colors
+GREY='\033[90m'     # Bright black (actual grey)
+YELLOW='\033[0;33m'
+CYAN='\033[1;36m'
+WHITE='\033[0;37m'
+BLUE='\033[1;34m'
+GREEN='\033[1;32m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+# Check if $tb is set
+if [[ -z "$tb" ]]; then
+  echo -e "${RED}Error: Environment variable \$tb is not set.${NC}" >&2
+  exit 1
+fi
+
+# Make sure $tb exists
+mkdir -p "$tb"
+
+# Standard buffer files
+STANDARD_FILES=( {a..z} {0..9} )
+
+tb_stats() {
+  local total=${#STANDARD_FILES[@]}
+  local per_row=6
+  local i=0
+  local sep="+--------+--------+--------+--------+--------+--------+"
+
+  # Preload file sizes using du
+  declare -A FILE_SIZES
+  while IFS=$'\t' read -r size fullpath; do
+    fname=$(basename "$fullpath")
+    FILE_SIZES["$fname"]=$size
+  done < <(du -b "$tb"/* 2>/dev/null)
+
+  while (( i < total )); do
+    echo "$sep"
+
+    # Print header row
+    for ((j=0; j < per_row && i + j < total; j++)); do
+      printf "| ${CYAN}%-6s${NC} " "${STANDARD_FILES[i+j]}"
+    done
+    echo "|"
+
+    # Print size row
+    for ((j=0; j < per_row && i + j < total; j++)); do
+      local file="${STANDARD_FILES[i+j]}"
+      if [[ ! -f "$tb/$file" ]]; then
+        printf "| ${GREY}%6s${NC} " "MISS"
+      else
+        size="${FILE_SIZES[$file]:-0}"
+        if (( size == 0 )); then
+          printf "| ${GREY}%6s${NC} " " "
+        else
+          human=$(numfmt --to=iec --padding=6 "$size")
+          printf "| ${YELLOW}%6s${NC} " "$human"
+        fi
+      fi
+    done
+    echo "|"
+    ((i += per_row))
+  done
+  echo "$sep"
+  echo
+}
+
+# Function: regen missing files
+tb_regen() {
+  local regenerated=()
+  for file in "${STANDARD_FILES[@]}"; do
+    path="$tb/$file"
+    if [[ ! -f "$path" ]]; then
+      touch "$path"
+      regenerated+=("$file")
+    fi
+  done
+  if [[ ${#regenerated[@]} -eq 0 ]]; then
+    echo "All standard buffer files already exist."
+  else
+    echo "Regenerated files: ${regenerated[*]}"
+  fi
+}
+
+# Function: list other files
+tb_other() {
+  for f in "$tb"/*; do
+    base=$(basename "$f")
+    if [[ ! " ${STANDARD_FILES[*]} " =~ " $base " ]]; then
+      echo "$tb/$base"
+    fi
+  done
+}
+
+# Function: get first empty buffer file
+tb_first_empty() {
+  for file in "${STANDARD_FILES[@]}"; do
+    path="$tb/$file"
+    [[ ! -f "$path" ]] && continue
+    if [[ ! -s "$path" ]]; then
+      echo "$path"
+      return 0
+    fi
+  done
+  return 1
+}
+
+tb_list() {
+  for file in "${STANDARD_FILES[@]}"; do
+    path="$tb/$file"
+    [[ ! -s "$path" ]] && continue
+
+    # Read first 3 non-empty lines, strip whitespace, collapse spaces
+    preview=$(head -n 5 "$path" | tr '\n' ' ' | sed -E 's/^[[:space:]]+|[[:space:]]+$//g; s/[[:space:]]+/ /g')
+
+    # Truncate if longer than 65 characters
+    if (( ${#preview} > 65 )); then
+      preview="${preview:0:62}..."
+    fi
+    lines=$(wc -l $path)
+
+    # Gather metadata
+    line_count=$(wc -l < "$path")
+    char_count=$(wc -m < "$path")
+
+    printf " ${CYAN}%s${NC} ${YELLOW}%-12s${NC} => ${WHITE}%-65s${NC}\n" "$file" "(${line_count}L/${char_count}B)" "$preview" >&2
+  done
+}
+
+tb_non_empty() {
+  local files=()
+  for file in "${STANDARD_FILES[@]}"; do
+    path="$tb/$file"
+    [[ -s "$path" ]] && files+=("$path")
+  done
+
+  if [[ ${#files[@]} -eq 0 ]]; then
+    echo "No non-empty buffers to open."
+    exit 1
+  fi
+
+  ${EDITOR:-vi} "+cd $tb" "${files[@]}"
+}
+
+# Argument parsing
+case "$1" in
+  -s|--stats)
+    tb_stats
+    ;;
+  -r|--regen)
+    tb_regen
+    ;;
+  -l|--list)
+    tb_list
+    ;;
+  -o|--other)
+    tb_other
+    ;;
+  -e|--empty)
+    file=$(tb_first_empty) || exit 1
+    echo "$file"
+    ;;
+  -ne|--nonempty)
+    tb_non_empty
+    ;;
+  "" )
+    file=$(tb_first_empty) || exit 1
+    ${EDITOR:-vi} "+cd $tb" "$file"
+    ;;
+  [a-z0-9] )
+      file="$tb/$1"
+      touch "$file"  # Ensure the file exists
+      ${EDITOR:-vi} "+cd $tb" "$file"
+      ;;
+  *)
+    echo "Unknown option: $1"
+    echo "Usage: tb [-s|--stats] [-r|--regen] [-o|--other]"
+    exit 1
+    ;;
+esac

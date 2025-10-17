@@ -1,10 +1,11 @@
 # Setup
 
 Linux general environment setup, primarily:
-- Terminal (Alacritty)
+
+- Terminal (alacritty)
 - tmux
 - vim/neovim
-- i3
+- sway (a wayland WM)
 
 > Note: Tested only on Ubuntu
 
@@ -39,17 +40,22 @@ bash -c "$(wget -qO- https://raw.githubusercontent.com/terxor/setup/main/setup.s
 
 For tex, look at install instructions on [tex live official website](https://tug.org/texlive/quickinstall.html#running)
   
-Reiterated here:
+Or simply run this script:
 
 ```
+#!/bin/bash
+set -e 
+
 cd ~/workspace/scratch
 curl -L -o install-tl-unx.tar.gz https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 zcat < install-tl-unx.tar.gz | tar xf -
-cd install-tl-*
-perl ./install-tl --no-interaction --scheme=small --no-doc-install --no-src-install --texdir=$HOME/bin/texlive
+
+cd "$(ls -d install-tl-* | head -n 1)"
+
+perl ./install-tl --no-interaction --scheme=small --no-doc-install --no-src-install --texdir=$HOME/.local/bin/texlive
 
 # Now, add the following line to your shell init
-export PATH=$PATH:$HOME/bin/texlive/bin/x86_64-linux
+PATH=$PATH:$HOME/.local/bin/texlive/bin/x86_64-linux
 
 # Install additional packages
 tlmgr install titlesec

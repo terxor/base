@@ -42,12 +42,20 @@ KEYTIMEOUT=1
 
 bindkey -M vicmd ';'  end-of-line
 
-# The prompt shows status of last command in first line.
-# The full directory (unless ~) in the second line.
-# The j part shows number of suspended jobs
-PROMPT='%(?:%F{green}OK%f:%F{red}FAILED%f) %F{white}($?)%f
-%F{blue}%~%f%F{red}%(1j. [%j].)%f $(git_prompt_info) %F{white}$(vi_mode_prompt_info)%f
-'
+build_prompt() {
+  local _vcs="${1:-\$(git_prompt_info)}"
+  local _status _path _jobs _vi
+
+  _status='%{%B%}%(?:%F{green}:%F{red})[$?]%f%{%b%}'
+  _path='%F{blue}%~%f'
+  _jobs='%F{yellow}%(1j. (bg:%j).)%f'
+  _vi='%F{white}$(vi_mode_prompt_info)%f'
+
+  _nl=$'\n'
+  printf "%s %s%s %s %s%s%%" "$_status" "$_path" "$_jobs" "$_vcs" "$_vi" "$_nl"
+}
+
+PROMPT="$(build_prompt)"
 
 RPROMPT=""
 MODE_INDICATOR="-- NORMAL --"
@@ -69,6 +77,8 @@ alias gitstat='find . -maxdepth 1 -mindepth 1 -type d -exec sh -c "(echo {} && c
 
 # show dotfiles/dirs by default but ignore .git
 alias tree='tree -a -I .git'
+
+alias vd='nvim -d'
 
 # --------------------------------
 # utils

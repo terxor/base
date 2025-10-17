@@ -23,7 +23,7 @@ endfunction
 
 if has("statusline") && !&cp
   set laststatus=2                                " always show the status bar
-  set statusline=\ %l/%L\ [col=%v]                " line and column
+  set statusline=\ L%l:%L\ C%c:%{col('$')-1}                " line and column
   set statusline+=\ %{&modified?'MODIFIED':''}    " show modified indicator
   set statusline+=%=                              " left-right separation point
   set statusline+=\ %{ShortenPath(expand('%:p'))} " full file path

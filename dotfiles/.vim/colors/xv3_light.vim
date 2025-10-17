@@ -24,10 +24,12 @@ let s:faded        = "102"
 let s:fg           = "238"
 let s:green        = "64"
 let s:grey         = "195"
+let s:grey2         = "242"
 let s:grey_alt     = "145"
 let s:lblue        = "153"
 let s:lgrey        = "252"
 let s:off_white    = "254"
+let s:orange4 = "94"
 let s:almostwhite  = "255"
 let s:purple       = "56"
 let s:red          = "88"
@@ -51,6 +53,7 @@ let s:b_yellow     = "229"
 let s:b_red        = "217"
 let s:yellow2      = "226"
 let s:green2       = "157"
+let s:dblue       = "25"
 
 let s:bold = "bold"
 let s:none = "none"
@@ -88,8 +91,8 @@ else
   call HgS("Normal", s:fg, s:bg, s:none)
 endif
 
-call HgS("StatusLine", s:fg,  s:b_green, s:bold) " Status line color on active/inactive buffers 
-call HgS("StatusLineNC", s:fg, s:off_white, "")
+call HgS("StatusLine", s:bg, s:dblue, s:bold) " Status line color on active/inactive buffers 
+call HgS("StatusLineNC", s:bg, s:grey2, "")
 call HgS("CursorLine",   "", s:almostwhite, "")
 call HgS("CursorLineNr", s:red, s:almostwhite, s:bold)
 call HgS("VertSplit", s:fg, s:off_white, "")
@@ -104,9 +107,9 @@ call HgF("Constant", s:blue)      " C++ true/false, stderr, __VA_ARGS__, ...
 call HgF("Statement", s:blue)     " C++ using, for, return, while, if, ...
 call HgF("PreProc", s:purple)
 call HgB("MatchParen", s:warn_bg)
-call HgS("Todo", s:red, s:bg, s:bold)
+call HgS("Todo", s:red, "", s:bold)
 call HgF("LineNr", s:faded)
-call HgS("Visual", s:fg, s:lblue, s:bold)
+call HgS("Visual", s:fg, s:lblue, "")
 call HgF("Title", s:red)
 call HgS("Search", s:fg, s:yellow2, "")
 call HgS("CurSearch", s:fg, s:yellow2, s:bold)
@@ -123,7 +126,7 @@ call HgS("xv3_Warn", "", s:warn_bg, "")
 call HgS("DiffAdd", s:green, s:b_green, "")
 call HgS("DiffDelete", s:b_red, s:b_red, s:none)
 call HgS("DiffChange", "", s:b_yellow, "")
-call HgS("DiffText", "", s:warn_bg, "")
+call HgS("DiffText", s:orange4, s:warn_bg, "")
 
 " call HgS("SignColumn", "", s:warn_bg, "")
 call HgS("FoldColumn", s:fg, s:bg, s:none)
