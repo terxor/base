@@ -14,7 +14,7 @@ Linux general environment setup, primarily:
 Download script, inspect and execute:
 
 ```
-curl -o /tmp/setup.sh https://raw.githubusercontent.com/terxor/setup/main/setup.sh
+curl -o /tmp/setup.sh https://raw.githubusercontent.com/terxor/base/main/setup.sh
 # Inspect setup.sh
 bash -c /tmp/setup.sh
 ```
@@ -22,11 +22,11 @@ bash -c /tmp/setup.sh
 Or, directly execute:
 
 ```
-BRANCH=main curl -fsSL https://raw.githubusercontent.com/terxor/setup/$BRANCH/setup.sh | bash -s -- --remote --branch $BRANCH
+BRANCH=main curl -fsSL https://raw.githubusercontent.com/terxor/base/$BRANCH/setup.sh | bash -s -- --remote --branch $BRANCH
 ```
 
 ```
-bash -c "$(wget -qO- https://raw.githubusercontent.com/terxor/setup/main/setup.sh)"
+bash -c "$(wget -qO- https://raw.githubusercontent.com/terxor/base/main/setup.sh)"
 ```
 
 ## Conventions
@@ -73,7 +73,7 @@ To reformat a file in-place: `clang-format -i src.cc`
 ### Alacritty/WSL setup
 
 ```
-curl -o "%USERPROFILE%\AppData\Roaming\alacritty\alacritty.toml" https://raw.githubusercontent.com/terxor/setup/refs/heads/staging/config/.alacritty.toml
+curl -o "%USERPROFILE%\AppData\Roaming\alacritty\alacritty.toml" https://raw.githubusercontent.com/terxor/base/refs/heads/staging/config/.alacritty.toml
 ```
 
 ### Touchpad issues

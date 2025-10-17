@@ -17,7 +17,6 @@ $BASE_TMP/base-$BRANCH/setup.sh
 ```
 
 Other ways are simply downloading or cloning this repo manually.
-Note that the convention that this repo is placed in `~/workspace/base`.
 
 ### Individual installations
 

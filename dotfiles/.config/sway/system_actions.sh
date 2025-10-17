@@ -6,7 +6,7 @@ action=$(echo -e "$choices" | wofi --dmenu --prompt "action")
 case "$action" in
   lock)
     swaylock \
-      -i $HOME/workspace/setup/other/bg.png \
+      -i $HOME/workspace/base/other/bg.png \
       --indicator-radius 110 \
       --font-size 20;;
   suspend)

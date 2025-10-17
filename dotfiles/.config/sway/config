@@ -23,7 +23,7 @@ set $term foot
 # Your preferred application launcher
 set $menu wmenu-run
 
-set $desktop_bg $HOME/workspace/setup/other/bg.png
+set $desktop_bg $HOME/workspace/base/other/bg.png
 
 include /etc/sway/config-vars.d/*
 
