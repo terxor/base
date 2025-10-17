@@ -1,0 +1,6 @@
+export UPSTREAM_USER='terxor'
+export BASE_REPO='base'
+export UPSTREAM_URL="https://github.com/$UPSTREAM_USER"
+export WS=$HOME/workspace
+export BASE=$WS/$BASE_REPO
+

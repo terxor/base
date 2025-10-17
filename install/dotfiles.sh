@@ -1,15 +1,14 @@
 #!/bin/bash
-
 set -euo pipefail
+INSTALL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source $INSTALL_DIR/env
+# ------------------------------------------------------------------------------
 
-REPO_BASE=https://github.com/terxor
-WORKSPACE=$HOME/workspace
-SETUP_REPO=$WORKSPACE/setup
-
-if [ ! -d $SETUP_REPO ]; then
-    mkdir -p $SETUP_REPO
-    git clone $REPO_BASE/setup $SETUP_REPO
+if [ ! -d $BASE ]; then
+    mkdir -p $BASE
+    git clone $UPSTREAM_URL/$BASE_REPO $BASE
 fi
+
 
 # Create dirs which will get populated with other stuff
 # so that stow doesn't link the dir
@@ -17,15 +16,6 @@ mkdir -p $HOME/.config/zsh
 mkdir -p $HOME/.config/nvim
 mkdir -p $HOME/.local/bin
 
-# Create dotfiles symlinks
-CUR_DIR=$(pwd)
-cd $SETUP_REPO
-stow -t $HOME --no-folding dotfiles
-cd $CUR_DIR
-
-if [ ! -d $WORKSPACE/utils ]; then
-    mkdir -p $WORKSPACE/utils
-    git clone $REPO_BASE/utils $WORKSPACE/utils
-    $WORKSPACE/utils/install.sh
-fi
+$BASE/utils/install.sh
+stow -v -d $BASE -t $HOME --adopt --no-folding dotfiles
 
