@@ -90,8 +90,9 @@ source $ZDOTDIR/custom_post.zsh
 # --------------------------------
 # standard utils lib
 # --------------------------------
-if [[ -d "$HOME/workspace/utils/py" ]]; then
-  export PYTHONPATH="${PYTHONPATH:+$PYTHONPATH:}$HOME/workspace/utils/py"
+local UTILS_PY_DIR=$HOME/workspace/base/utils/py
+if [[ -d "$UTILS_PY_DIR" ]]; then
+  export PYTHONPATH="${PYTHONPATH:+$PYTHONPATH:}$UTILS_PY_DIR"
 fi
 
 # tmpbuf related
